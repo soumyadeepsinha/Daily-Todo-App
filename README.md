@@ -1,4 +1,9 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> This is a ToDo List App created with [Create React App](https://github.com/facebook/create-react-app).
+
+## Agenda
+
+- [x] Create ToDO app with React
+- [x] Create a form with input and button
 
 ## Available Scripts
 

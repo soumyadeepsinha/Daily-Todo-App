@@ -2,12 +2,11 @@ import React, { useState, useCallback, useEffect } from 'react';
 import './App.css'
 
 const App = () => {
-  const [newToDo, setNewToDo] = useState('');
+  const [newTodo, setNewTodo] = useState('');
   const [todos, setTodos] = useState([]);
 
   const todoChange = useCallback((e) => {
-    console.log(e.target.value);
-    setNewToDo(e.target.value);
+    setNewTodo(e.target.value);
   }, []);
 
   //* CallBack will run only when it's dependencies get changed
@@ -19,16 +18,26 @@ const App = () => {
       ...todos,
       {
         id: todos.length + 1,
-        content: newToDo,
+        content: newTodo,
         done: false
       }
     ]);
-    setNewToDo(''); //! attempt to create a new todo with empty form
-  }, [newToDo, todos]); //? on form submit, we will update newToDo so it will also chnage todos
+    setNewTodo(''); //! attempt to create a new todo with empty form
+  }, [newTodo, todos]); //? on form submit, we will update newToDo so it will also chnage todos
 
   useEffect(() => {
     console.log('todos', todos);
   }, [todos]);  //? useEffect will only run it's function (console) only when it's dependencies (todos) has changed
+
+  const addTodos = useCallback((todo, index) => (e) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1, {
+      ...todo,
+      done: !todo.done
+    });
+    setTodos(newTodos);
+  }, [todos]);
+
 
   return (
     <React.Fragment>
@@ -36,12 +45,16 @@ const App = () => {
         <form onSubmit={formSubmit}>
           <label htmlFor="newtodo">Enter your new ToDo :</label>
           <br />
-          <input id="newtodo" name="newtodo" value={newToDo} onChange={todoChange} />
+          <input id="newtodo" name="newtodo" value={newTodo} onChange={todoChange} />
           <button>Add a new ToDo</button>
         </form>
         <ul>
-          {todos.map((todo) => (
-            <li>{todo.content}</li>
+          {todos.map((todo, index) => (
+            <li key={todo.id}>
+              <input type="checkbox"
+                onChange={addTodos(todo, index)} />
+              {todo.content}
+            </li>
           ))}
         </ul>
       </div>
