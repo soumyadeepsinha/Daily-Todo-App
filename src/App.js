@@ -13,14 +13,15 @@ const App = () => {
   const formSubmit = useCallback((e) => {
     //* prevent from refreshing the page
     e.preventDefault();
+    if (!newTodo.trim()) return;
     setTodos([
-      // spread todos
-      ...todos,
       {
-        id: todos.length + 1,
+        id: todos.length ? todos[0].id + 1 : 1,
         content: newTodo,
         done: false
-      }
+      },
+      // spread todos
+      ...todos
     ]);
     setNewTodo(''); //! attempt to create a new todo with empty form
   }, [newTodo, todos]); //? on form submit, we will update newToDo so it will also chnage todos
@@ -36,8 +37,11 @@ const App = () => {
       done: !todo.done
     });
     setTodos(newTodos);
-  }, [todos]);
+  }, [todos]);    //* dependencies on todos
 
+  const removeTodos = useCallback((todo) => (e) => {
+    setTodos(todos.filter(otherTodo => otherTodo !== todo));
+  }, [todos]);    //* dependencies on todos
 
   return (
     <React.Fragment>
@@ -53,7 +57,8 @@ const App = () => {
             <li key={todo.id}>
               <input type="checkbox"
                 onChange={addTodos(todo, index)} />
-              {todo.content}
+              <span className={todo.done ? 'done' : ''}>{todo.content}</span>
+              <button onClick={removeTodos(todo)}>Remove Todo</button>
             </li>
           ))}
         </ul>
