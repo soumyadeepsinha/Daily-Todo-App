@@ -37,11 +37,26 @@ const App = () => {
       done: !todo.done
     });
     setTodos(newTodos);
-  }, [todos]);    //* dependencies on todos
+  }, [todos]);    //* depending on todos
 
   const removeTodos = useCallback((todo) => (e) => {
     setTodos(todos.filter(otherTodo => otherTodo !== todo));
-  }, [todos]);    //* dependencies on todos
+  }, [todos]);    //* depending on todos
+
+  const markAlldone = useCallback(() => {
+    // create a copy of the array
+    // create a copy of each of the items
+    // update the done property to be true on each of the new items
+    // depending on todos
+    const updatedTodos = todos.map(todo => {
+      return {
+        ...todo,
+        done: true,
+        className: todo.done,
+      };
+    });
+    setTodos(updatedTodos);
+  }, [todos]);
 
   return (
     <React.Fragment>
@@ -52,6 +67,7 @@ const App = () => {
           <input id="newtodo" name="newtodo" value={newTodo} onChange={todoChange} />
           <button>Add a new ToDo</button>
         </form>
+        <button onClick={markAlldone}>Mark All Done</button>
         <ul>
           {todos.map((todo, index) => (
             <li key={todo.id}>
