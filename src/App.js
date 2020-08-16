@@ -11,7 +11,7 @@ const App = () => {
 
   const formSubmit = useCallback((e) => {
     e.preventDefault();
-    if (!newTodo.trim()) return;
+    if (!newTodo.trim()) return;   //* blank input isnt acceptable
     setTodos([
       {
         id: todos.length ? todos[0].id + 1 : 1,
@@ -20,12 +20,12 @@ const App = () => {
       },
       ...todos
     ]);
-    setNewTodo('');
-  }, [newTodo, todos]);
+    setNewTodo('');     //* clear form when we add a todo
+  }, [newTodo, todos]); //* on form submit, we will update newToDo so it will also chnage todos
 
   useEffect(() => {
     console.log('todos', todos);
-  }, [todos]);
+  }, [todos]);          //* useEffect will only run when it's dependencies(todos) has changed
 
   const addTodo = useCallback((todo, index) => (e) => {
     const newTodos = [...todos];
@@ -38,7 +38,7 @@ const App = () => {
 
   const removeTodo = useCallback((todo) => (e) => {
     setTodos(todos.filter(otherTodo => otherTodo !== todo));
-  }, [todos]);
+  }, [todos]);        //* depeding on todos
 
   const markAlldone = useCallback(() => {
     // create a copy of the array
@@ -51,7 +51,7 @@ const App = () => {
       };
     });
     setTodos(updatedTodos);
-  }, [todos]);
+  }, [todos]);       //* depeding on todos
 
   return (
     <div>
